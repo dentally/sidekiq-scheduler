@@ -20,9 +20,11 @@ module SidekiqScheduler
     #
     # @return [String] with the job's next time
     def next_time
-      execution_time = SidekiqScheduler::RedisManager.get_job_next_time(name)
+      @next_time ||= begin
+        execution_time = SidekiqScheduler::RedisManager.get_job_next_time(name)
 
-      relative_time(Time.parse(execution_time)) if execution_time
+        relative_time(Time.parse(execution_time)) if execution_time
+      end
     end
 
     # Returns the last execution time for the job
